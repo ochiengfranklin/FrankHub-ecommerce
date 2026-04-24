@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { clearCart } from '../redux/cartSlice'
+import API from '../api/axios'
 
 const Checkout = () => {
     const cartItems = useSelector((state) => state.cart.items)
@@ -17,6 +18,8 @@ const Checkout = () => {
 
     const [errors, setErrors] = useState({})
     const [orderPlaced, setOrderPlaced] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [serverError, setServerError] = useState('')
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
     const shipping = subtotal >= 50 ? 0 : 9.99
@@ -47,14 +50,49 @@ const Checkout = () => {
         return newErrors
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const newErrors = validate()
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors)
-            return
+        if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return }
+
+        const user = JSON.parse(localStorage.getItem('user'))
+        if (!user) { navigate('/login'); return }
+
+        try {
+            setLoading(true)
+            setServerError('')
+            await API.post('/orders', {
+                items: cartItems.map((item) => ({
+                    product: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    size: item.size,
+                    color: item.color,
+                    image: item.image,
+                })),
+                shippingAddress: {
+                    firstName: form.firstName,
+                    lastName: form.lastName,
+                    email: form.email,
+                    phone: form.phone,
+                    address: form.address,
+                    city: form.city,
+                    state: form.state,
+                    zip: form.zip,
+                    country: form.country,
+                },
+                paymentMethod: form.paymentMethod,
+                subtotal,
+                shippingPrice: shipping,
+                total,
+            })
+            dispatch(clearCart())
+            setOrderPlaced(true)
+        } catch (error) {
+            setServerError(error.response?.data?.message || 'Something went wrong. Please try again.')
+        } finally {
+            setLoading(false)
         }
-        dispatch(clearCart())
-        setOrderPlaced(true)
     }
 
     if (cartItems.length === 0 && !orderPlaced) {
@@ -96,6 +134,12 @@ const Checkout = () => {
     return (
         <section className="container mx-auto px-4 md:px-16 py-16">
             <h1 className="text-3xl font-extrabold text-gray-900 mb-10">Checkout</h1>
+
+            {serverError && (
+                <div className="bg-red-50 border border-red-200 text-red-500 text-xs font-medium px-4 py-3 rounded-lg mb-6">
+                    {serverError}
+                </div>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
@@ -148,7 +192,6 @@ const Checkout = () => {
                     {/* Payment */}
                     <div className="flex flex-col gap-4">
                         <h2 className="text-lg font-bold text-gray-900 border-b border-gray-100 pb-2">Payment Method</h2>
-
                         <div className="flex gap-4">
                             {['card', 'paypal', 'cod'].map((method) => (
                                 <button
@@ -203,7 +246,6 @@ const Checkout = () => {
                 {/* Right — Order Summary */}
                 <div className="flex flex-col gap-4 bg-gray-50 rounded-2xl p-6 h-fit">
                     <h2 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Order Summary</h2>
-
                     <ul className="flex flex-col gap-4">
                         {cartItems.map((item) => (
                             <li key={item.id} className="flex items-center gap-3">
@@ -234,9 +276,10 @@ const Checkout = () => {
 
                     <button
                         onClick={handleSubmit}
-                        className="w-full bg-[#ea2e0e] text-white text-sm font-semibold py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 cursor-pointer mt-2"
+                        disabled={loading}
+                        className="w-full bg-[#ea2e0e] text-white text-sm font-semibold py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 cursor-pointer disabled:opacity-60 mt-2"
                     >
-                        Place Order
+                        {loading ? 'Placing Order...' : 'Place Order'}
                     </button>
 
                     <p className="text-xs text-gray-400 text-center">
@@ -244,7 +287,6 @@ const Checkout = () => {
                         <span className="text-[#ea2e0e] cursor-pointer hover:underline">Terms of Service</span>
                     </p>
                 </div>
-
             </div>
         </section>
     )

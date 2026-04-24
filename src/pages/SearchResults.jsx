@@ -1,15 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import allProducts from '../data/products'
+import API from '../api/axios'
 
 const SearchResults = () => {
     const [searchParams] = useSearchParams()
     const query = searchParams.get('q') || ''
+    const [results, setResults] = useState([])
+    const [loading, setLoading] = useState(true)
 
-    const results = allProducts.filter((p) =>
-        p.name.toLowerCase().includes(query.toLowerCase()) ||
-        p.category.toLowerCase().includes(query.toLowerCase())
-    )
+    useEffect(() => {
+        const fetchResults = async () => {
+            try {
+                setLoading(true)
+                const { data } = await API.get(`/products?search=${encodeURIComponent(query)}`)
+                setResults(data)
+            } catch (error) {
+                console.error('Failed to fetch search results:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        if (query) fetchResults()
+        else setLoading(false)
+    }, [query])
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-[60vh]">
+                <div className="h-8 w-8 border-4 border-[#ea2e0e] border-t-transparent rounded-full animate-spin" />
+            </div>
+        )
+    }
 
     return (
         <section className="container mx-auto px-4 md:px-16 py-16">
@@ -36,13 +57,13 @@ const SearchResults = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                     {results.map((product) => (
                         <Link
-                            to={`/product/${product.id}`}
-                            key={product.id}
+                            to={`/product/${product._id}`}
+                            key={product._id}
                             className="group flex flex-col gap-3"
                         >
                             <div className="relative overflow-hidden rounded-2xl bg-gray-100">
                                 <img
-                                    src={product.image}
+                                    src={product.images[0]?.url}
                                     alt={product.name}
                                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                                 />

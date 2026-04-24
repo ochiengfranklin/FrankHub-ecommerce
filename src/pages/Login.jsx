@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import API from '../api/axios'
 
 const Login = () => {
     const navigate = useNavigate()
     const [form, setForm] = useState({ email: '', password: '' })
     const [errors, setErrors] = useState({})
+    const [loading, setLoading] = useState(false)
+    const [serverError, setServerError] = useState('')
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
         setErrors({ ...errors, [e.target.name]: '' })
+        setServerError('')
     }
 
     const validate = () => {
@@ -18,11 +22,19 @@ const Login = () => {
         return newErrors
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const newErrors = validate()
         if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return }
-        console.log('Login:', form)
-        navigate('/')
+        try {
+            setLoading(true)
+            const { data } = await API.post('/auth/login', form)
+            localStorage.setItem('user', JSON.stringify(data))
+            navigate('/')
+        } catch (error) {
+            setServerError(error.response?.data?.message || 'Something went wrong')
+        } finally {
+            setLoading(false)
+        }
     }
 
     const inputClass = (field) =>
@@ -42,6 +54,13 @@ const Login = () => {
                     <h1 className="text-xl font-extrabold text-gray-900 mt-2">Welcome back</h1>
                     <p className="text-sm text-gray-500">Sign in to your account to continue</p>
                 </div>
+
+                {/* Server Error */}
+                {serverError && (
+                    <div className="bg-red-50 border border-red-200 text-red-500 text-xs font-medium px-4 py-3 rounded-lg">
+                        {serverError}
+                    </div>
+                )}
 
                 {/* Form */}
                 <div className="flex flex-col gap-4">
@@ -80,9 +99,10 @@ const Login = () => {
 
                     <button
                         onClick={handleSubmit}
-                        className="w-full bg-[#ea2e0e] text-white text-sm font-semibold py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 cursor-pointer"
+                        disabled={loading}
+                        className="w-full bg-[#ea2e0e] text-white text-sm font-semibold py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 cursor-pointer disabled:opacity-60"
                     >
-                        Sign In
+                        {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                 </div>
 

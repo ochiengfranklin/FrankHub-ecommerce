@@ -1,13 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import allProducts from '../data/products'
-
-const categoryMap = {
-    men: (p) => p.category.toLowerCase().includes("men's") && !p.category.toLowerCase().includes("women"),
-    women: (p) => p.category.toLowerCase().includes("women"),
-    topwear: (p) => p.category.toLowerCase().includes("top wear"),
-    bottomwear: (p) => p.category.toLowerCase().includes("bottom wear"),
-}
+import API from '../api/axios'
 
 const titleMap = {
     men: "Men's Collection",
@@ -16,14 +9,39 @@ const titleMap = {
     bottomwear: "Bottom Wear",
 }
 
+const categoryMap = {
+    men: "Men's",
+    women: "Women's",
+    topwear: "Top Wear",
+    bottomwear: "Bottom Wear",
+}
+
 const CollectionPage = () => {
     const { category } = useParams()
+    const [products, setProducts] = useState([])
+    const [loading, setLoading] = useState(true)
     const [sort, setSort] = useState('default')
     const [priceRange, setPriceRange] = useState('all')
 
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                setLoading(true)
+                const { data } = await API.get('/products')
+                setProducts(data)
+            } catch (error) {
+                console.error('Failed to fetch products:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchProducts()
+    }, [category])
+
     const filtered = useMemo(() => {
-        const filterFn = categoryMap[category]
-        let result = filterFn ? allProducts.filter(filterFn) : allProducts
+        let result = products.filter((p) =>
+            p.category.toLowerCase().includes(categoryMap[category]?.toLowerCase() || '')
+        )
 
         if (priceRange === 'under30') result = result.filter(p => p.price < 30)
         else if (priceRange === '30to50') result = result.filter(p => p.price >= 30 && p.price <= 50)
@@ -34,9 +52,17 @@ const CollectionPage = () => {
         else if (sort === 'name') result = [...result].sort((a, b) => a.name.localeCompare(b.name))
 
         return result
-    }, [category, sort, priceRange])
+    }, [products, category, sort, priceRange])
 
     const title = titleMap[category] || 'All Products'
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-[60vh]">
+                <div className="h-8 w-8 border-4 border-[#ea2e0e] border-t-transparent rounded-full animate-spin" />
+            </div>
+        )
+    }
 
     return (
         <section className="container mx-auto px-4 md:px-16 py-16">
@@ -57,8 +83,6 @@ const CollectionPage = () => {
 
             {/* Filters & Sort */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-
-                {/* Price Filter */}
                 <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-sm font-semibold text-gray-700">Price:</span>
                     {[
@@ -81,7 +105,6 @@ const CollectionPage = () => {
                     ))}
                 </div>
 
-                {/* Sort */}
                 <select
                     value={sort}
                     onChange={(e) => setSort(e.target.value)}
@@ -112,13 +135,13 @@ const CollectionPage = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                     {filtered.map((product) => (
                         <Link
-                            to={`/product/${product.id}`}
-                            key={product.id}
+                            to={`/product/${product._id}`}
+                            key={product._id}
                             className="group flex flex-col gap-3"
                         >
                             <div className="relative overflow-hidden rounded-2xl bg-gray-100">
                                 <img
-                                    src={product.image}
+                                    src={product.images[0]?.url}
                                     alt={product.name}
                                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                                 />

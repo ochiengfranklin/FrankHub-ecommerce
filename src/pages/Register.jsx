@@ -1,20 +1,23 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import API from '../api/axios'
 
 const Register = () => {
     const navigate = useNavigate()
-    const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' })
+    const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' })
     const [errors, setErrors] = useState({})
+    const [loading, setLoading] = useState(false)
+    const [serverError, setServerError] = useState('')
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
         setErrors({ ...errors, [e.target.name]: '' })
+        setServerError('')
     }
 
     const validate = () => {
         const newErrors = {}
-        if (!form.firstName.trim()) newErrors.firstName = 'Required'
-        if (!form.lastName.trim()) newErrors.lastName = 'Required'
+        if (!form.name.trim()) newErrors.name = 'Required'
         if (!form.email.trim()) newErrors.email = 'Required'
         if (!form.password.trim()) newErrors.password = 'Required'
         if (!form.confirmPassword.trim()) newErrors.confirmPassword = 'Required'
@@ -24,11 +27,23 @@ const Register = () => {
         return newErrors
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const newErrors = validate()
         if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return }
-        console.log('Register:', form)
-        navigate('/')
+        try {
+            setLoading(true)
+            const { data } = await API.post('/auth/register', {
+                name: form.name,
+                email: form.email,
+                password: form.password,
+            })
+            localStorage.setItem('user', JSON.stringify(data))
+            navigate('/')
+        } catch (error) {
+            setServerError(error.response?.data?.message || 'Something went wrong')
+        } finally {
+            setLoading(false)
+        }
     }
 
     const inputClass = (field) =>
@@ -49,29 +64,24 @@ const Register = () => {
                     <p className="text-sm text-gray-500">Join FrankHub and start shopping</p>
                 </div>
 
+                {/* Server Error */}
+                {serverError && (
+                    <div className="bg-red-50 border border-red-200 text-red-500 text-xs font-medium px-4 py-3 rounded-lg">
+                        {serverError}
+                    </div>
+                )}
+
                 {/* Form */}
                 <div className="flex flex-col gap-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <input
-                                name="firstName"
-                                placeholder="First Name"
-                                value={form.firstName}
-                                onChange={handleChange}
-                                className={inputClass('firstName')}
-                            />
-                            {errors.firstName && <p className="text-xs text-red-500 mt-1">{errors.firstName}</p>}
-                        </div>
-                        <div>
-                            <input
-                                name="lastName"
-                                placeholder="Last Name"
-                                value={form.lastName}
-                                onChange={handleChange}
-                                className={inputClass('lastName')}
-                            />
-                            {errors.lastName && <p className="text-xs text-red-500 mt-1">{errors.lastName}</p>}
-                        </div>
+                    <div>
+                        <input
+                            name="name"
+                            placeholder="Full Name"
+                            value={form.name}
+                            onChange={handleChange}
+                            className={inputClass('name')}
+                        />
+                        {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                     </div>
                     <div>
                         <input
@@ -109,9 +119,10 @@ const Register = () => {
 
                     <button
                         onClick={handleSubmit}
-                        className="w-full bg-[#ea2e0e] text-white text-sm font-semibold py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 cursor-pointer"
+                        disabled={loading}
+                        className="w-full bg-[#ea2e0e] text-white text-sm font-semibold py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 cursor-pointer disabled:opacity-60"
                     >
-                        Create Account
+                        {loading ? 'Creating account...' : 'Create Account'}
                     </button>
                 </div>
 
