@@ -7,7 +7,7 @@ const CartComponents = ({ cartItems = [], onRemove, onIncrease, onDecrease }) =>
             {cartItems.map((item) => (
                 <li key={item.id} className="flex items-center gap-4 border-b border-gray-100 pb-4">
 
-                    {/* Product Image */}
+
                     <img
                         src={item.image}
                         alt={item.name}
