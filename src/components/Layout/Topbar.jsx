@@ -24,8 +24,8 @@ const Topbar = () => {
                     Free shipping on orders over $50
                 </p>
 
-                <a href="tel:+11234567890" className="hidden sm:block text-xs font-medium tracking-wide opacity-80 hover:opacity-100 transition-all duration-200">
-                    +1 (123) 456-7890
+                <a href="tel:+254797536021" className="hidden sm:block text-xs font-medium tracking-wide opacity-80 hover:opacity-100 transition-all duration-200">
+                    +254 797 536 021
                 </a>
 
             </div>

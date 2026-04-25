@@ -21,7 +21,7 @@ const SearchBar = () => {
     }
 
     return (
-        <div className="relative">
+        <div className="relative flex items-center">
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Open search"

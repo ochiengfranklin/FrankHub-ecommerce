@@ -71,7 +71,11 @@ const Footer = () => {
                         <li><Link to="/shipping" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">Shipping & Returns</Link></li>
                         <li><Link to="/contact" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">Contact Us</Link></li>
                         <li><Link to="/track-order" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">Track Order</Link></li>
-                        <li><a href="tel:+11234567890" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">Call Us: +1 (123) 456-7890</a></li>
+                        <li>
+                            <a href="tel:+254797536021" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
+                                Call Us: +254 797 536 021
+                            </a>
+                        </li>
                     </ul>
                 </div>
 

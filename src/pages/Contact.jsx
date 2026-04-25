@@ -38,8 +38,8 @@ const Contact = () => {
 
     const contactInfo = [
         { icon: HiOutlineMail, label: 'Email', value: 'support@frankhub.com' },
-        { icon: HiOutlinePhone, label: 'Phone', value: '+1 (123) 456-7890' },
-        { icon: HiOutlineLocationMarker, label: 'Address', value: '123 Fashion Street, New York, NY 10001' },
+        { icon: HiOutlinePhone, label: 'Phone', value: '+254 797 536 021' },
+        { icon: HiOutlineLocationMarker, label: 'Address', value: 'Kimathi Street, Nairobi, Kenya' },
         { icon: HiOutlineClock, label: 'Working Hours', value: 'Mon - Fri, 9:00 AM - 6:00 PM' },
     ]
 

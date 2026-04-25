@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { clearCart } from '../redux/cartSlice'
@@ -20,6 +20,13 @@ const Checkout = () => {
     const [orderPlaced, setOrderPlaced] = useState(false)
     const [loading, setLoading] = useState(false)
     const [serverError, setServerError] = useState('')
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'))
+        if (!user) {
+            navigate('/login')
+        }
+    }, [])
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
     const shipping = subtotal >= 50 ? 0 : 9.99
