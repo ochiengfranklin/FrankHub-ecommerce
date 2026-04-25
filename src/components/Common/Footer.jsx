@@ -7,8 +7,6 @@ import { RiTwitterXLine } from 'react-icons/ri'
 const Footer = () => {
     return (
         <footer className="bg-gray-900 text-gray-300">
-
-
             <div className="container mx-auto px-4 md:px-16 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
 
                 {/* Brand */}
@@ -37,23 +35,23 @@ const Footer = () => {
                     <h3 className="text-white font-semibold text-sm uppercase tracking-widest">Shop</h3>
                     <ul className="flex flex-col gap-2">
                         <li>
-                            <Link to="/mens-topwear" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
-                                Men's Top Wear
+                            <Link to="/men" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
+                                Men's Collection
                             </Link>
                         </li>
                         <li>
-                            <Link to="/womens-topwear" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
-                                Women's Top Wear
+                            <Link to="/women" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
+                                Women's Collection
                             </Link>
                         </li>
                         <li>
-                            <Link to="/mens-bottomwear" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
-                                Men's Bottom Wear
+                            <Link to="/topwear" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
+                                Top Wear
                             </Link>
                         </li>
                         <li>
-                            <Link to="/womens-bottomwear" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
-                                Women's Bottom Wear
+                            <Link to="/bottomwear" className="text-sm hover:text-[#ea2e0e] transition-colors duration-200">
+                                Bottom Wear
                             </Link>
                         </li>
                     </ul>
@@ -127,7 +125,6 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-
         </footer>
     )
 }
