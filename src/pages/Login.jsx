@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import API from '../api/axios'
 
 const Login = () => {
     const navigate = useNavigate()
+    const location = useLocation()
     const [form, setForm] = useState({ email: '', password: '' })
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false)
@@ -29,7 +30,8 @@ const Login = () => {
             setLoading(true)
             const { data } = await API.post('/auth/login', form)
             localStorage.setItem('user', JSON.stringify(data))
-            navigate('/')
+            const redirectTo = location.state?.from || '/'
+            navigate(redirectTo)
         } catch (error) {
             setServerError(error.response?.data?.message || 'Something went wrong')
         } finally {

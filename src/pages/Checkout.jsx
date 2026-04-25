@@ -24,7 +24,7 @@ const Checkout = () => {
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'))
         if (!user) {
-            navigate('/login')
+            navigate('/login', { state: { from: '/checkout' } })
         }
     }, [])
 
@@ -62,7 +62,7 @@ const Checkout = () => {
         if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return }
 
         const user = JSON.parse(localStorage.getItem('user'))
-        if (!user) { navigate('/login'); return }
+        if (!user) { navigate('/login', { state: { from: '/checkout' } }); return }
 
         try {
             setLoading(true)
