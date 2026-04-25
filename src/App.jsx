@@ -14,6 +14,10 @@ import AdminLayout from "./admin/components/AdminLayout.jsx"
 import AdminDashboard from "./admin/pages/AdminDashboard.jsx"
 import AdminProducts from "./admin/pages/AdminProducts.jsx"
 import AdminOrders from "./admin/pages/AdminOrders.jsx"
+import FAQ from "./pages/FAQ.jsx";
+import Shipping from "./pages/Shipping.jsx";
+import Contact from "./pages/Contact.jsx";
+import TrackOrder from "./pages/TrackOrder.jsx";
 
 const App = () => {
     return (
@@ -39,6 +43,10 @@ const App = () => {
                     <Route path="profile" element={<Profile />} />
                     <Route path=":category" element={<CollectionPage />} />
                     <Route path="*" element={<NotFound />} />
+                    <Route path="faq" element={<FAQ />} />
+                    <Route path="shipping" element={<Shipping />} />
+                    <Route path="contact" element={<Contact />} />
+                    <Route path="track-order" element={<TrackOrder />} />
                 </Route>
             </Routes>
         </BrowserRouter>

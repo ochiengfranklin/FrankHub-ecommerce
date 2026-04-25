@@ -7,24 +7,19 @@ const Hero = () => {
         <section className="relative bg-gray-50 overflow-hidden">
             <div className="container mx-auto px-4 md:px-16 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between gap-12">
 
-
                 <div className="flex flex-col gap-6 max-w-lg text-center md:text-left">
 
-
-                   <span className="inline-block self-center md:self-start bg-[#ea2e0e] text-white text-xs font-semibold px-4 py-1.5 rounded-full tracking-widest uppercase">
-                      2025 Collection
+                    <span className="inline-block self-center md:self-start bg-[#ea2e0e] text-white text-xs font-semibold px-4 py-1.5 rounded-full tracking-widest uppercase">
+                        2026 Collection
                     </span>
-
 
                     <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">
                         Dress to <span className="text-[#ea2e0e]">Impress</span> Every Day
                     </h1>
 
-
                     <p className="text-gray-500 text-base md:text-lg leading-relaxed">
                         Discover the latest trends in men's and women's fashion. Premium quality clothing designed for modern living.
                     </p>
-
 
                     <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
                         <Link
@@ -40,7 +35,6 @@ const Hero = () => {
                             Shop Women
                         </Link>
                     </div>
-
 
                     <div className="flex items-center justify-center md:justify-start gap-8 mt-4 border-t border-gray-200 pt-6">
                         <div className="flex flex-col items-center md:items-start">
@@ -60,7 +54,6 @@ const Hero = () => {
                     </div>
 
                 </div>
-
 
                 <div className="relative w-full max-w-sm md:max-w-lg shrink-0">
                     <div className="absolute inset-0 bg-[#ea2e0e] opacity-10 rounded-3xl blur-3xl" />
