@@ -94,9 +94,9 @@ const Login = () => {
                             <input type="checkbox" className="accent-[#ea2e0e]" />
                             Remember me
                         </label>
-                        <span className="text-xs text-[#ea2e0e] hover:underline cursor-pointer">
+                        <Link to="/forgot-password" className="text-xs text-[#ea2e0e] hover:underline">
                             Forgot password?
-                        </span>
+                        </Link>
                     </div>
 
                     <button
