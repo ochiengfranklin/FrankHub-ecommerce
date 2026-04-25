@@ -21,6 +21,8 @@ import TrackOrder from "./pages/TrackOrder.jsx"
 import ForgotPassword from "./pages/ForgotPassword.jsx"
 import ResetPassword from "./pages/ResetPassword.jsx"
 import OAuthSuccess from "./pages/OAuthSuccess.jsx"
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx"
+import TermsOfService from "./pages/TermsOfService.jsx"
 
 const App = () => {
     return (
@@ -51,6 +53,8 @@ const App = () => {
                     <Route path="shipping" element={<Shipping />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="track-order" element={<TrackOrder />} />
+                    <Route path="privacy" element={<PrivacyPolicy />} />
+                    <Route path="terms" element={<TermsOfService />} />
                     <Route path=":category" element={<CollectionPage />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>
