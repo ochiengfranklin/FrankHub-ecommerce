@@ -20,6 +20,7 @@ import Contact from "./pages/Contact.jsx"
 import TrackOrder from "./pages/TrackOrder.jsx"
 import ForgotPassword from "./pages/ForgotPassword.jsx"
 import ResetPassword from "./pages/ResetPassword.jsx"
+import OAuthSuccess from "./pages/OAuthSuccess.jsx"
 
 const App = () => {
     return (
@@ -30,6 +31,7 @@ const App = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route path="/oauth-success" element={<OAuthSuccess />} />
 
                 {/* Admin routes */}
                 <Route path="/admin" element={<AdminLayout />}>

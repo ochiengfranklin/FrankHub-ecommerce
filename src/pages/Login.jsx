@@ -116,7 +116,10 @@ const Login = () => {
                 </div>
 
                 {/* Google */}
-                <button className="w-full border border-gray-300 text-sm font-medium text-gray-700 py-2.5 rounded-lg hover:border-[#ea2e0e] hover:text-[#ea2e0e] transition-colors duration-200 cursor-pointer flex items-center justify-center gap-2">
+                <button
+                    onClick={() => window.location.href = 'https://web-production-e9962.up.railway.app/api/auth/google'}
+                    className="w-full border border-gray-300 text-sm font-medium text-gray-700 py-2.5 rounded-lg hover:border-[#ea2e0e] hover:text-[#ea2e0e] transition-colors duration-200 cursor-pointer flex items-center justify-center gap-2"
+                >
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-4 w-4" />
                     Continue with Google
                 </button>
