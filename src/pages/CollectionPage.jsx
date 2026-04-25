@@ -9,13 +9,6 @@ const titleMap = {
     bottomwear: "Bottom Wear",
 }
 
-const categoryMap = {
-    men: "Men's",
-    women: "Women's",
-    topwear: "Top Wear",
-    bottomwear: "Bottom Wear",
-}
-
 const CollectionPage = () => {
     const { category } = useParams()
     const [products, setProducts] = useState([])
@@ -39,9 +32,13 @@ const CollectionPage = () => {
     }, [category])
 
     const filtered = useMemo(() => {
-        let result = products.filter((p) =>
-            p.category.toLowerCase().includes(categoryMap[category]?.toLowerCase() || '')
-        )
+        let result = products.filter((p) => {
+            if (category === 'men') return p.category.toLowerCase().startsWith("men's")
+            if (category === 'women') return p.category.toLowerCase().startsWith("women's")
+            if (category === 'topwear') return p.category.toLowerCase().includes('top wear')
+            if (category === 'bottomwear') return p.category.toLowerCase().includes('bottom wear')
+            return true
+        })
 
         if (priceRange === 'under30') result = result.filter(p => p.price < 30)
         else if (priceRange === '30to50') result = result.filter(p => p.price >= 30 && p.price <= 50)
